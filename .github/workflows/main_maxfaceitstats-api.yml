@@ -59,3 +59,4 @@ jobs:
           TEST_SECRET: ${{ secrets.TEST_SECRET }}
           FACEIT_API: ${{ secrets.FACEIT_API }}
           STEAM_API: ${{ secrets.STEAM_API }}
+          JWT__SigningKey: ${{ secrets.JWT_SIGNING_KEY }}

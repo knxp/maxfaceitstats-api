@@ -1,0 +1,22 @@
+@contentType = application/json
+@hostname = localhost:5009
+
+### Test Health Check
+GET https://{{hostname}}/health
+Accept: {{contentType}}
+
+### Test Local Auth
+POST https://{{hostname}}/api/token
+Content-Type: {{contentType}}
+
+{
+}
+
+### Test Production Auth
+@baseUrl = https://maxfaceitstats-api.azurewebsites.net
+
+POST {{baseUrl}}/api/token
+Content-Type: {{contentType}}
+
+{
+} 

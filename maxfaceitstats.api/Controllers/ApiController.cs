@@ -6,21 +6,23 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using maxfaceitstats.api.Models;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace maxfaceitstats.api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController : ControllerBase
+    public class ApiController : ControllerBase
     {
         private readonly IConfiguration _configuration;
 
-        public AuthController(IConfiguration configuration)
+        public ApiController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
         [HttpPost("token")]
+        [EnableRateLimiting("fixed")]
         public IActionResult GetToken([FromBody] AuthRequest request)
         {
             // Validate both API keys exist
@@ -32,8 +34,10 @@ namespace maxfaceitstats.api.Controllers
                 return StatusCode(500, "API configuration is missing");
             }
 
+            var jwtKey = _configuration["JWT:SigningKey"] ?? throw new Exception("JWT:SigningKey is not configured");
+            var key = Encoding.UTF8.GetBytes(jwtKey);
+
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(faceitApiKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]

@@ -3,13 +3,13 @@ GET https://localhost:5009/health
 Accept: application/json
 
 ### Test Auth Token Generation (Local)
-POST https://localhost:5009/auth/token
+POST https://localhost:5009/api/token
 Content-Type: application/json
 
 {}
 
 ### Test Auth Token Generation (Production)
-POST https://maxfaceitstats-api.azurewebsites.net/auth/token
+POST https://maxfaceitstats-api.azurewebsites.net/api/token
 Content-Type: application/json
 
 {}
