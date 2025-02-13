@@ -55,8 +55,3 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CB07FE338F6F4EE3A53D423DE9F930DD }}
           package: .
-        env:
-          TEST_SECRET: ${{ secrets.TEST_SECRET }}
-          FACEIT_API: ${{ secrets.FACEIT_API }}
-          STEAM_API: ${{ secrets.STEAM_API }}
-          JWT__SigningKey: ${{ secrets.JWT_SIGNING_KEY }}

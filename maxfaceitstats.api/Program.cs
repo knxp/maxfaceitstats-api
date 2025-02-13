@@ -10,15 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllers();
 
-// Configure CORS for maxfaceitstats.com
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MaxFaceitStatsPolicy", policy =>
     {
         policy.WithOrigins("https://www.maxfaceitstats.com")
-            .WithMethods("POST")  // Only allow POST for token endpoint
-            .WithHeaders("Content-Type")
-            .DisallowCredentials();
+            .WithMethods("POST", "OPTIONS")  // Add OPTIONS for preflight
+            .WithHeaders("Content-Type", "Authorization") // Add Authorization
+            .DisallowCredentials()
+            .SetPreflightMaxAge(TimeSpan.FromMinutes(10)); // Cache preflight
     });
 });
 
@@ -82,6 +82,19 @@ app.UseRateLimiter();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+}
+
+if (app.Environment.IsProduction())
+{
+    app.UseExceptionHandler(errorApp =>
+    {
+        errorApp.Run(async context =>
+        {
+            context.Response.StatusCode = 500;
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsJsonAsync(new { error = "Check Azure configuration" });
+        });
+    });
 }
 
 app.Run();
