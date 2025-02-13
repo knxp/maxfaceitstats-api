@@ -398,3 +398,23 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Development settings and secrets
+appsettings.Development.json
+appsettings.Local.json
+*.Development.json
+.env
+.env.local
+secrets.json
+local.settings.json
+
+# Azure Functions localsettings file
+local.settings.json
+
+# Visual Studio files and folders
+.vs/
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates

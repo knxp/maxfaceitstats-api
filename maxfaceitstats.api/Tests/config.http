@@ -1,3 +1,15 @@
-### Test Config Endpoint
-GET https://localhost:5009/ConfigTest
-Accept: application/json 
+### Test Health Check (No auth required)
+GET https://localhost:5009/health
+Accept: application/json
+
+### Test Auth Token Generation (Local)
+POST https://localhost:5009/auth/token
+Content-Type: application/json
+
+{}
+
+### Test Auth Token Generation (Production)
+POST https://maxfaceitstats-api.azurewebsites.net/auth/token
+Content-Type: application/json
+
+{}

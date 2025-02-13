@@ -2,23 +2,22 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using maxfaceitstats.api.Middleware;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 // Configure CORS for maxfaceitstats.com
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MaxFaceitStatsPolicy", policy =>
     {
-        policy.WithOrigins("https://maxfaceitstats.com")
+        policy.WithOrigins("https://www.maxfaceitstats.com")
             .AllowAnyMethod()
             .AllowAnyHeader()
-            .SetIsOriginAllowed(origin => true); // Allow any origin during development
+            .DisallowCredentials(); // Security best practice for APIs
     });
 });
 
@@ -32,29 +31,25 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        // Configure JWT validation parameters
+        var faceitApiKey = builder.Configuration["FACEIT_API"] ?? throw new Exception("FACEIT_API is not configured");
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            // Add your validation parameters here
+            ValidIssuer = "https://maxfaceitstats-api.azurewebsites.net",
+            ValidAudience = "https://www.maxfaceitstats.com",
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(faceitApiKey))
         };
     });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-else
-{
-    app.UseHsts();
-}
+app.UseHsts();
 
 // Use forwarded headers
 app.UseForwardedHeaders();
