@@ -47,14 +47,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddRateLimiter(options =>
-{
-    options.AddFixedWindowLimiter("fixed", options =>
-    {
-        options.PermitLimit = 10;
-        options.Window = TimeSpan.FromMinutes(1);
-    });
-});
+
 
 var app = builder.Build();
 
