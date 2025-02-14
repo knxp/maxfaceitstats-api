@@ -6,6 +6,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using maxfaceitstats.api.Models;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace maxfaceitstats.api.Controllers
 {
@@ -56,6 +58,42 @@ namespace maxfaceitstats.api.Controllers
             {
                 Token = tokenHandler.WriteToken(token)
             });
+        }
+
+        [HttpGet("steam/resolve/{vanityUrl}")]
+        public async Task<IActionResult> ResolveSteamVanityUrl(string vanityUrl)
+        {
+            try
+            {
+                var steamApiKey = _configuration["STEAM_API"];
+                if (string.IsNullOrEmpty(steamApiKey))
+                {
+                    return StatusCode(500, "Steam API key not configured");
+                }
+
+                using var httpClient = new HttpClient();
+                var response = await httpClient.GetAsync(
+                    $"https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key={steamApiKey}&vanityurl={vanityUrl}");
+
+                response.EnsureSuccessStatusCode();
+
+                var jsonResponse = await response.Content.ReadFromJsonAsync<JsonDocument>();
+                var steamId = jsonResponse?.RootElement
+                    .GetProperty("response")
+                    .GetProperty("steamid")
+                    .GetString();
+
+                if (string.IsNullOrEmpty(steamId))
+                {
+                    return NotFound("Steam ID not found");
+                }
+
+                return Ok(steamId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error resolving Steam vanity URL");
+            }
         }
     }
 }
