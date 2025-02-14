@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using maxfaceitstats.api.Middleware;
 using System.Text;
-using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,8 +46,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
@@ -69,8 +66,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseMiddleware<SecurityHeadersMiddleware>();
-
-app.UseRateLimiter();
 
 if (app.Environment.IsDevelopment())
 {

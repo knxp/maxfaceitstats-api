@@ -6,7 +6,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using maxfaceitstats.api.Models;
-using Microsoft.AspNetCore.RateLimiting;
 
 namespace maxfaceitstats.api.Controllers
 {
@@ -22,7 +21,6 @@ namespace maxfaceitstats.api.Controllers
         }
 
         [HttpPost("token")]
-        [EnableRateLimiting("fixed")]
         public IActionResult GetToken([FromBody] AuthRequest request)
         {
             // Validate both API keys exist
