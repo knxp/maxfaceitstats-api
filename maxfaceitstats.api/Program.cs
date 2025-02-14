@@ -13,11 +13,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("MaxFaceitStatsPolicy", policy =>
     {
-        policy.WithOrigins("https://www.maxfaceitstats.com")
-            .WithMethods("POST", "OPTIONS")  // Add OPTIONS for preflight
-            .WithHeaders("Content-Type", "Authorization") // Add Authorization
-            .DisallowCredentials()
-            .SetPreflightMaxAge(TimeSpan.FromMinutes(10)); // Cache preflight
+        policy.WithOrigins(
+                "https://www.maxfaceitstats.com",
+                "https://localhost:5001"  // Add local development URL
+            )
+            .WithMethods("GET", "POST", "OPTIONS")
+            .WithHeaders("Content-Type", "Authorization")
+            .DisallowCredentials();
     });
 });
 
