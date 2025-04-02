@@ -15,6 +15,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
                 "https://www.maxfaceitstats.com",
+                "https://maxfaceitstats.com",
                 "https://localhost:5001"  // Add local development URL
             )
             .WithMethods("GET", "POST", "OPTIONS")
