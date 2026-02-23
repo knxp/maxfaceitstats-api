@@ -16,7 +16,7 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(
                 "https://www.maxstats.dev",
                 "https://maxstats.dev",
-                "https://localhost:5001"  // Add local development URL
+                "https://localhost:5000"  // Add local development URL
             )
             .WithMethods("GET", "POST", "OPTIONS")
             .WithHeaders("Content-Type", "Authorization")
@@ -42,7 +42,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "https://maxstats-api-c4b8dudcgsdxeraf.centralus-01.azurewebsites.net",
+            ValidIssuer = "https://maxfaceitstats-api-c4b8dudcgsdxeraf.centralus-01.azurewebsites.net",
             ValidAudience = "https://maxstats.dev",
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(jwtKey))
