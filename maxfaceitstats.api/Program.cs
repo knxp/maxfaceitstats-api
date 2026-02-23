@@ -11,11 +11,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MaxFaceitStatsPolicy", policy =>
+    options.AddPolicy("MaxStatsPolicy", policy =>
     {
         policy.WithOrigins(
-                "https://www.maxfaceitstats.com",
-                "https://maxfaceitstats.com",
+                "https://www.maxstats.dev",
+                "https://maxstats.dev",
                 "https://localhost:5001"  // Add local development URL
             )
             .WithMethods("GET", "POST", "OPTIONS")
@@ -42,8 +42,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "https://maxfaceitstats-api.azurewebsites.net",
-            ValidAudience = "https://www.maxfaceitstats.com",
+            ValidIssuer = "https://maxstats-api-c4b8dudcgsdxeraf.centralus-01.azurewebsites.net",
+            ValidAudience = "https://maxstats.dev",
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(jwtKey))
         };
@@ -61,7 +61,7 @@ app.UseForwardedHeaders();
 app.UseHttpsRedirection();
 
 // Use CORS before routing
-app.UseCors("MaxFaceitStatsPolicy");
+app.UseCors("MaxStatsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();

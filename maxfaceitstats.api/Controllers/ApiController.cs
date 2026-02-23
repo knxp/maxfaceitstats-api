@@ -46,8 +46,8 @@ namespace maxfaceitstats.api.Controllers
                     new Claim("SteamApiKey", steamApiKey)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1), // Short expiration for security
-                Issuer = "https://maxfaceitstats-api.azurewebsites.net",
-                Audience = "https://www.maxfaceitstats.com",
+                Issuer = "https://maxstats-api-c4b8dudcgsdxeraf.centralus-01.azurewebsites.net",
+                Audience = "https://maxstats.dev",
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)
